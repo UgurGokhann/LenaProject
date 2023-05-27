@@ -1,0 +1,52 @@
+﻿@model List<FormListDto>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">FormId</th>
+            <th scope="col">FormName</th>
+            <th scope="col">Description</th>
+            <th scope="col">FieldName</th>
+            <th scope="col">FieldDataType</th>
+            <th scope="col">FieldRequired</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tbody>
+            <tr>
+                <td>@item.User.Username</td>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                @foreach (var field in item.Fields)
+                {
+                    <td>@field.Name</td>
+                    <td>@field.DataType</td>
+                    <td>@field.Required</td>
+                }
+                <td><a class="btn btn-primary" asp-controller="Form" asp-action="Detail" asp-route-id="@item.Id">Detail</a></td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td><a class="btn btn-primary" asp-controller="Form" asp-action="Remove" asp-route-id="@item.Id">Remove</a></td>
+                }
+            </tr>
+
+        </tbody>
+
+    }
+</table>
+
+
+
+
+
+
+
+

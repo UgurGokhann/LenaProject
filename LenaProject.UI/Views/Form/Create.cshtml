@@ -1,0 +1,144 @@
+﻿@using LenaProject.DataAccess.Enums;
+@model FormCreateDto
+@{
+    Layout = "_Layout";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="">Create Form</a>
+}
+else
+{
+    <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Login</a>
+}
+
+<head>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    
+</head>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-danger text-center" asp-validation-summary="ModelOnly">
+                </div>
+                <form class="needs-validation" novalidate asp-controller="Form" asp-action="Create" method="post">
+                    <div class="form-group ">
+                        <label asp-for="@Model.Name" class="col-form-label">Name:</label>
+                        <input asp-for="@Model.Name" type="text" class="form-control" required/>
+                        <div class="invalid-feedback" >
+                            Please enter a valid Name
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.Description" class="col-form-label">Description:</label>
+                        <textarea asp-for="@Model.Description" class="form-control" required></textarea>
+                        <div class="invalid-feedback">
+                            Please enter a valid Description
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input id="Addbutton" type="button" value="Add"/>
+                    </div>
+                    <div id="TextBoxContainer">
+                        
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input type="submit"  value="Create" class="btn btn-danger"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            var i = 0;
+            $("#Addbutton").click(function () {
+                var div = $("<div />");
+                var divName = $("<div />");
+                var divDataType = $("<div />");
+                var divRequired = $("<div />");
+
+                var value = "";
+
+                var nameBoxlbl = $("<label>Name: </label>");
+                var nameBox = $("<input required/>").attr("type", "textbox").attr("name", "Fields[" + i + "].Name") ;
+                var dataTypeBoxlbl = $("<label>DataType: </label>");
+                var dataTypeBox = $("<select></select>").attr("name", "Fields[" + i + "].DataType");
+                var requiredBoxlbl = $("<label>Required: </label>");
+                var requiredBox = $("<select></select>").attr("name", "Fields[" + i + "].Required");
+
+                nameBox.val(value);
+                dataTypeBox.val(value);
+                requiredBox.val(value);
+
+                
+                var dataTypeValues = @Html.Raw(Json.Serialize(Enum.GetNames(typeof(DataTypes))));
+                for (var j = 0; j < dataTypeValues.length; j++) {
+                    var option = $("<option />").text(dataTypeValues[j]).val(dataTypeValues[j]);
+                    dataTypeBox.append(option);
+                }
+
+                var requiredValues = @Html.Raw(Json.Serialize(Enum.GetNames(typeof(RequiredType))));
+                for (var j = 0; j < requiredValues.length; j++) {
+                    var option = $("<option />").text(requiredValues[j]).val(requiredValues[j]);
+                    requiredBox.append(option);
+                }
+
+                divName.append(nameBoxlbl);
+                divName.append(nameBox);
+                div.append(divName);
+                divDataType.append(dataTypeBoxlbl);
+                divDataType.append(dataTypeBox);
+                div.append(divDataType);
+                divRequired.append(requiredBoxlbl);
+                divRequired.append(requiredBox);
+                div.append(divRequired);
+                
+                var button = $("<input />").attr("type", "button").attr("value", "Remove");
+                button.attr("onclick", "RemoveTextBox(this)");
+                div.append(button);
+                $("#TextBoxContainer").append(div);
+                i++;
+            });
+        });
+        function RemoveTextBox(button) {
+            $(button).parent().remove();
+        }
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+    }
+   

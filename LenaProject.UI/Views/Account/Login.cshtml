@@ -1,0 +1,26 @@
+﻿@model UserLoginDto
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <form asp-controller="Account" asp-action="Login">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Username</label>
+                    <input type="text" asp-for=@Model.Username class="form-control" placeholder="Username">
+
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" asp-for=@Model.Password class="form-control" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <div class="text-danger text-center" asp-validation-summary="All">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

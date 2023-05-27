@@ -1,0 +1,87 @@
+﻿@model FormListDto
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">FormId</th>
+            <th scope="col">FormName</th>
+            <th scope="col">Description</th>
+            <th scope="col">FieldName</th>
+            <th scope="col">FieldDataType</th>
+            <th scope="col">FieldRequired</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Form Name : @Model.Name</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" asp-for="@Model.Id"/>
+                        
+                        <div class="form-group">
+                            <label class="col-form-label">Description: @Model.Description</label>
+                            
+                        </div>
+                        @foreach (var item in Model.Fields)
+                        {
+                            <label class="col-form-label">Field Name: @item.Name</label>
+                            if (item.DataType == LenaProject.DataAccess.Enums.DataTypes.Number)
+                            {
+                                <input type="Number" class="form-control">
+                            }
+                            else if (item.DataType == LenaProject.DataAccess.Enums.DataTypes.CheckBox)
+                            {
+                                <input type="checkbox" class="form-control">
+                            }
+                            else if (item.DataType == LenaProject.DataAccess.Enums.DataTypes.TextArea)
+                            {
+                                <textarea class="form-control" ></textarea>
+                            }
+                            else if (item.DataType == LenaProject.DataAccess.Enums.DataTypes.String)
+                            {
+                                <input type="text" class="form-control">
+                            }
+                        }
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save Form</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <tbody>
+        <tr>
+            <td>@Model.User.Username</td>
+            <td>@Model.Id</td>
+            <td>@Model.Name</td>
+            <td>@Model.Description</td>
+            @foreach (var field in Model.Fields)
+            {
+                <td>@field.Name</td>
+                <td>@field.DataType</td>
+                <td>@field.Required</td>
+            }
+            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="">Show</button></td>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <td><a class="btn btn-primary" asp-controller="Form" asp-action="Remove" asp-route-id="@Model.Id">Remove</a></td>
+            }
+
+        </tr>
+
+    </tbody>
+ 
+</table>
+
+
